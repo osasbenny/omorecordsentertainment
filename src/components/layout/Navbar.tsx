@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Menu, X, Disc3 } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   isScrolled: boolean;
@@ -25,27 +25,29 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
     >
       <div className="container flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2" onClick={closeMenu}>
-          <Disc3 className="w-8 h-8 text-primary-600" />
-          <span className="text-xl font-bold tracking-tight font-display">
-            Omorecords
+          <img src="/logo.png" alt="F.OMO Records" className="w-8 h-8" />
+          <span className={`text-xl font-bold tracking-tight font-display ${
+            isScrolled ? 'text-gray-900' : 'text-white'
+          }`}>
+            F.OMO Records
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:block">
           <ul className="flex items-center space-x-8">
-            <NavItem to="/" onClick={closeMenu}>Home</NavItem>
-            <NavItem to="/about" onClick={closeMenu}>About</NavItem>
-            <NavItem to="/artists" onClick={closeMenu}>Artists</NavItem>
-            <NavItem to="/events" onClick={closeMenu}>Events</NavItem>
-            <NavItem to="/media" onClick={closeMenu}>Media</NavItem>
-            <NavItem to="/contact" onClick={closeMenu}>Contact</NavItem>
+            <NavItem to="/" onClick={closeMenu} isScrolled={isScrolled}>Home</NavItem>
+            <NavItem to="/about" onClick={closeMenu} isScrolled={isScrolled}>About</NavItem>
+            <NavItem to="/artists" onClick={closeMenu} isScrolled={isScrolled}>Artists</NavItem>
+            <NavItem to="/events" onClick={closeMenu} isScrolled={isScrolled}>Events</NavItem>
+            <NavItem to="/media" onClick={closeMenu} isScrolled={isScrolled}>Media</NavItem>
+            <NavItem to="/contact" onClick={closeMenu} isScrolled={isScrolled}>Contact</NavItem>
           </ul>
         </nav>
 
         {/* Mobile Menu Button */}
         <button
-          className="p-2 md:hidden"
+          className={`p-2 md:hidden ${isScrolled ? 'text-gray-900' : 'text-white'}`}
           onClick={toggleMenu}
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         >
@@ -62,12 +64,12 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
         <div className="fixed inset-0 z-40 flex md:hidden bg-white bg-opacity-95 animate-fade-in pt-20">
           <nav className="w-full px-4">
             <ul className="flex flex-col items-center space-y-6 text-lg">
-              <NavItem to="/" onClick={closeMenu}>Home</NavItem>
-              <NavItem to="/about" onClick={closeMenu}>About</NavItem>
-              <NavItem to="/artists" onClick={closeMenu}>Artists</NavItem>
-              <NavItem to="/events" onClick={closeMenu}>Events</NavItem>
-              <NavItem to="/media" onClick={closeMenu}>Media</NavItem>
-              <NavItem to="/contact" onClick={closeMenu}>Contact</NavItem>
+              <NavItem to="/" onClick={closeMenu} isScrolled={true}>Home</NavItem>
+              <NavItem to="/about" onClick={closeMenu} isScrolled={true}>About</NavItem>
+              <NavItem to="/artists" onClick={closeMenu} isScrolled={true}>Artists</NavItem>
+              <NavItem to="/events" onClick={closeMenu} isScrolled={true}>Events</NavItem>
+              <NavItem to="/media" onClick={closeMenu} isScrolled={true}>Media</NavItem>
+              <NavItem to="/contact" onClick={closeMenu} isScrolled={true}>Contact</NavItem>
             </ul>
           </nav>
         </div>
@@ -80,15 +82,20 @@ interface NavItemProps {
   to: string;
   children: React.ReactNode;
   onClick: () => void;
+  isScrolled: boolean;
 }
 
-const NavItem = ({ to, children, onClick }: NavItemProps) => (
+const NavItem = ({ to, children, onClick, isScrolled }: NavItemProps) => (
   <li>
     <NavLink
       to={to}
       className={({ isActive }) =>
         `relative px-2 py-1 font-medium transition-colors ${
-          isActive ? 'text-primary-600' : 'hover:text-primary-600'
+          isActive 
+            ? 'text-primary-600' 
+            : isScrolled 
+              ? 'text-gray-900 hover:text-primary-600'
+              : 'text-white hover:text-primary-200'
         }`
       }
       onClick={onClick}
